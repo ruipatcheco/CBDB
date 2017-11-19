@@ -36,9 +36,9 @@ public class LoginImpl extends UnicastRemoteObject implements Login
 
 	public Session login(String name, char[] password) throws LoginException, RemoteException{
         // name/password check; if it fails throw a LoginException
+    	Session s = new SessionImpl(name); 
     	
-    	
-        return new SessionImpl(name); 
+        return s;
     }
 	
 	public static void main(String[] args) throws RemoteException, IllegalArgumentException {

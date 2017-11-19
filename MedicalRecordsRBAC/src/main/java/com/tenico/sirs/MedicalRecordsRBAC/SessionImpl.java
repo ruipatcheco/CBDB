@@ -21,7 +21,6 @@ public class SessionImpl extends UnicastRemoteObject implements Session, Unrefer
 	private Clinician loggedClinician;
 
 	public SessionImpl(String name) throws RemoteException{
-		// TODO Auto-generated constructor stub
 		//construct Clinician from name;
 		
 		this.loggedClinician = new Clinician(new Speciality("Osteopatia", null), name);

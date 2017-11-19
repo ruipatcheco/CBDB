@@ -65,7 +65,7 @@ public class AppClientSSL {
 	}
     
     private enum Command {
-        listPatients, listAppointments, viewMedicalRecord, viewPatientRecords, whoami, help, exit;
+        lp, la, vmr, vpr, whoami, help, exit;
     }
     
     private static Boolean parseCommand(String input, Session s) throws RemoteException {
@@ -73,7 +73,7 @@ public class AppClientSSL {
     	
     	switch(c) {
     		case help:
-            	System.out.println("Commands: listPatients, listAppointments, viewMedicalRecord, viewPatientRecords, whoami, help, exit");
+            	System.out.println("Commands: lp (listPatients), la (listAppointments), vmr (viewMedicalRecord), vpr (viewPatientRecords), whoami, help, exit");
             	break;
     		case exit:
     			s.logout();

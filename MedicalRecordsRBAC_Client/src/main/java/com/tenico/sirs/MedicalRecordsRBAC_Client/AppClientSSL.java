@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
+import java.util.UUID;
 
 import javax.rmi.ssl.SslRMIClientSocketFactory;
 import javax.security.auth.login.LoginException;
@@ -64,11 +65,14 @@ public class AppClientSSL {
 	}
     
     private enum Command {
-        lp, la, vmr, vpr, whoami, help, exit;
+        lp, vmr, vpr, whoami, help, exit;
     }
     
     private static Boolean parseCommand(String input, App s) throws RemoteException {
-    	Command c = Command.valueOf(input);
+		String str = input;
+		String[] splitStr = str.split("\\s+");
+
+    	Command c = Command.valueOf(splitStr[0]);
     	
     	switch(c) {
     		case help:
@@ -79,6 +83,25 @@ public class AppClientSSL {
     			return true;
     		case whoami:
     			System.out.println(s.getLoggedClinicianName());
+				break;
+
+			case vpr:
+				UUID patient_id = UUID.fromString(splitStr[1]);
+				System.out.println(s.viewPatientRecords(patient_id));
+				break;
+
+			case vmr:
+				UUID record_id = UUID.fromString(splitStr[1]);
+				System.out.println(s.viewMedicalRecord(record_id));
+				break;
+
+			case lp:
+				System.out.println(s.listPatients());
+				break;
+
+			default:
+				System.out.println("Commands: lp (listPatients), la (listAppointments), vmr (viewMedicalRecord), vpr (viewPatientRecords), whoami, help, exit");
+				break;
     	}
     	
     	return false;

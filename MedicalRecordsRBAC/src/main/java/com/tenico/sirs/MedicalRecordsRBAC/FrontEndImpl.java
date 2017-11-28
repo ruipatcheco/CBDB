@@ -1,27 +1,19 @@
 package com.tenico.sirs.MedicalRecordsRBAC;
 
-import java.io.IOException;
+import java.net.Authenticator;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.SSLServerSocketFactory;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
 import javax.rmi.ssl.SslRMIClientSocketFactory;
 import javax.rmi.ssl.SslRMIServerSocketFactory;
 
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-
 import javax.security.auth.login.LoginException;
 
-import com.tenico.sirs.CommonTypes.Login;
-import com.tenico.sirs.CommonTypes.Session;
+import com.tenico.sirs.CommonTypes.FrontEnd;
 
-public class LoginImpl extends UnicastRemoteObject implements Login
+public class FrontEndImpl extends UnicastRemoteObject implements FrontEnd
 {
     /**
 	 * 
@@ -29,27 +21,32 @@ public class LoginImpl extends UnicastRemoteObject implements Login
 	 */
 	
 	private static final long serialVersionUID = 1L;
+    private com.tenico.sirs.MedicalRecordsRBAC.Authenticator authenticator;
 
-	protected LoginImpl(int port) throws RemoteException {
+	protected FrontEndImpl(int port) throws RemoteException {
         super(port, new SslRMIClientSocketFactory(), new SslRMIServerSocketFactory(null, null, false));      
+	    authenticator = new com.tenico.sirs.MedicalRecordsRBAC.Authenticator();
 	}
 
-	public Session login(String name, char[] password) throws LoginException, RemoteException{
+	public AppImpl login(String username, char[] password) throws LoginException, RemoteException{
         // name/password check; if it fails throw a LoginException
-    	Session s = new SessionImpl(name); 
-    	
-        return s;
+        if(authenticator.verifyLogin(username, password)){
+            return new AppImpl(username);
+        }
+    	else{
+            throw new LoginException("Incorrect credentials");
+        }
     }
 	
 	public static void main(String[] args) throws RemoteException, IllegalArgumentException {
 
         try {          
         	int port = 1099;
-        	String boundingName = "Login";
+        	String boundingName = "FrontEnd";
 
             setSettings();
 
-            LoginImpl login = new LoginImpl(port);
+            FrontEndImpl login = new FrontEndImpl(port);
             
             Registry registry = null;
             try {

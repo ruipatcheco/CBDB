@@ -8,9 +8,8 @@ import java.util.Scanner;
 import javax.rmi.ssl.SslRMIClientSocketFactory;
 import javax.security.auth.login.LoginException;
 
-import com.tenico.sirs.CommonTypes.Login;
-import com.tenico.sirs.CommonTypes.ServerInterface;
-import com.tenico.sirs.CommonTypes.Session;
+import com.tenico.sirs.CommonTypes.App;
+import com.tenico.sirs.CommonTypes.FrontEnd;
 
 
 public class AppClientSSL {
@@ -21,18 +20,18 @@ public class AppClientSSL {
 
         try {
         	int port = 1099;
-        	String boundingName = "Login";
+        	String boundingName = "FrontEnd";
         	
             setSettings();  
 
             Registry registry = LocateRegistry.getRegistry("localhost", port, new SslRMIClientSocketFactory());
 
-            Login l = (Login) registry.lookup(boundingName);
+            FrontEnd l = (FrontEnd) registry.lookup(boundingName);
             
             System.out.println("Application started succesfully");
         	Scanner inputScanner = new Scanner(System.in);
             
-            Session s = loginManager(l,inputScanner);
+            App s = loginManager(l,inputScanner);
             
             sessionManager(s,inputScanner);
 
@@ -42,7 +41,7 @@ public class AppClientSSL {
         }
     }
     
-    private static void sessionManager(Session s, Scanner inputScanner) {
+    private static void sessionManager(App s, Scanner inputScanner) {
     	String input;
     	Boolean logout = false;
         System.out.println("Write help for help");
@@ -68,7 +67,7 @@ public class AppClientSSL {
         lp, la, vmr, vpr, whoami, help, exit;
     }
     
-    private static Boolean parseCommand(String input, Session s) throws RemoteException {
+    private static Boolean parseCommand(String input, App s) throws RemoteException {
     	Command c = Command.valueOf(input);
     	
     	switch(c) {
@@ -85,7 +84,7 @@ public class AppClientSSL {
     	return false;
 	}
 
-	private static Session loginManager(Login l, Scanner inputScanner) {
+	private static App loginManager(FrontEnd l, Scanner inputScanner) {
     	
     	while(true) {
 	        System.out.print("Enter your username: ");
@@ -95,11 +94,11 @@ public class AppClientSSL {
 	        String password = inputScanner.next();
 	        
 	        try {
-	            Session s = l.login(username, password.toCharArray());
+	            App s = l.login(username, password.toCharArray());
 	            return s;
 	        }
 	        catch(LoginException|RemoteException e){
-	            System.out.println("Login failed, try again");
+	            System.out.println("FrontEnd failed, try again");
 	            e.printStackTrace();
 	        }
     	}

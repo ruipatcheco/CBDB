@@ -7,10 +7,10 @@ import java.rmi.server.Unreferenced;
 import java.util.UUID;
 
 import com.tenico.sirs.CommonTypes.Clinician;
-import com.tenico.sirs.CommonTypes.Session;
+import com.tenico.sirs.CommonTypes.App;
 import com.tenico.sirs.CommonTypes.Speciality;
 
-public class SessionImpl extends UnicastRemoteObject implements Session, Unreferenced {
+public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 
 	/**
 	 * 
@@ -20,11 +20,14 @@ public class SessionImpl extends UnicastRemoteObject implements Session, Unrefer
 	
 	private Clinician loggedClinician;
 
-	public SessionImpl(String name) throws RemoteException{
+	public AppImpl(String name) throws RemoteException{
 		//construct Clinician from name;
-		
+
+
 		this.loggedClinician = new Clinician(new Speciality("Osteopatia", null), name);
 	}
+
+
 
 	public void logout() throws RemoteException {
 		// TODO Auto-generated method stub

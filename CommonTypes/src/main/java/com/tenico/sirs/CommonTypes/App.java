@@ -4,9 +4,9 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.UUID;
 
-//Remote Session Pattern
+//Remote App Pattern
 
-public interface Session extends Remote
+public interface App extends Remote
 {
 	String getLoggedClinicianName() throws RemoteException;
     void logout() throws RemoteException;

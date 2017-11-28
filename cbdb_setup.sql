@@ -1,8 +1,9 @@
 CREATE DATABASE IF NOT EXISTS CBDB;
-/*
-CREATE USER IF NOT EXISTS cbdb_su@localhost IDENTIFIED BY 'password'
-GRANT ALL ON CBDB.* TO cbdb_su@localhost;
-*/USE CBDB;
+
+CREATE USER IF NOT EXISTS 'cbdb_su'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL ON CBDB.* TO 'cbdb_su'@'localhost' IDENTIFIED BY 'password';
+
+USE CBDB;
 CREATE TABLE IF NOT EXISTS PATIENTS (
 	PatientID INT NOT NULL,
 	PatientName VARCHAR(255) NOT NULL,

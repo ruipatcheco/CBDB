@@ -28,9 +28,9 @@ public class FrontEndImpl extends UnicastRemoteObject implements FrontEnd
 	    authenticator = new com.tenico.sirs.MedicalRecordsRBAC.Authenticator();
 	}
 
-	public AppImpl login(String username, char[] password) throws LoginException, RemoteException{
+	public AppImpl login(String username, String passwordHash) throws LoginException, RemoteException{
         // name/password check; if it fails throw a LoginException
-        if(authenticator.verifyLogin(username, password)){
+        if(authenticator.verifyLogin(username, passwordHash)){
             return new AppImpl(username);
         }
     	else{

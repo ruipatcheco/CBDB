@@ -115,9 +115,23 @@ public class AppClientSSL {
 	    	
 	        System.out.print("Enter your password: ");
 	        String password = inputScanner.next();
-	        
+	        //TODO Should be passing a hash
+			/*
+					MessageDigest messageDigest = null;
+
+				try {
+					messageDigest = MessageDigest.getInstance("SHA-512");
+				} catch (NoSuchAlgorithmException e) {
+					System.out.println("SHA-512 not found");
+					e.printStackTrace();
+				}
+
+				byte[] result = messageDigest.digest(input.getBytes());
+
+				String finalResult = new String(result);
+			* */
 	        try {
-	            App s = l.login(username, password.toCharArray());
+	            App s = l.login(username, password);
 	            return s;
 	        }
 	        catch(LoginException|RemoteException e){

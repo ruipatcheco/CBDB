@@ -6,10 +6,10 @@ import java.sql.SQLException;
 
 public abstract class DecisionPointBase {
 
-    protected Connection database;
+    protected Connection con;
 
     public DecisionPointBase(){
-        this.database = connect2Database();
+        this.con = connect2Database();
     }
 
     private Connection connect2Database(){
@@ -31,7 +31,7 @@ public abstract class DecisionPointBase {
 
     public void disconnectDatabase(){
         try {
-            database.close();
+            con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

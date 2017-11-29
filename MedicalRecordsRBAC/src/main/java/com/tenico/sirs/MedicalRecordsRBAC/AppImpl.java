@@ -4,11 +4,10 @@ import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.server.Unreferenced;
+import java.util.List;
 import java.util.UUID;
 
-import com.tenico.sirs.CommonTypes.Clinician;
-import com.tenico.sirs.CommonTypes.App;
-import com.tenico.sirs.CommonTypes.Speciality;
+import com.tenico.sirs.CommonTypes.*;
 
 public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 
@@ -16,7 +15,10 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 	 * 
 	 * https://stackoverflow.com/questions/13632442/how-to-organize-rmi-client-server-architecture
 	 */
-	private static final long serialVersionUID = 1L;
+
+	//Commands: lp (listPatients), vmr (viewMedicalRecord), vpr (viewPatientRecords), whoami, help, exit");
+
+    private static final long serialVersionUID = 1L;
 	
 	private Clinician loggedClinician;
 
@@ -28,23 +30,29 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 	}
 
 
-
+    @Override
 	public void logout() throws RemoteException {
 		// TODO Auto-generated method stub
 		this.loggedClinician = null;
 		unexportObject(this, true);
 	}
 
-	public void listAppointments() throws RemoteException {
-		// TODO Auto-generated method stub
+    @Override
+    public List<Patient> listPatients() throws RemoteException {
+        return null;
+    }
 
-	}
+    @Override
+    public Medical_Record viewMedicalRecord(UUID record_id) throws RemoteException {
+        return null;
+    }
 
-	public void listRecords(UUID patient_id) throws RemoteException {
-		// TODO Auto-generated method stub
+    @Override
+    public List<Medical_Record> viewPatientRecords(UUID patient_id) throws RemoteException {
+        return null;
+    }
 
-	}
-	
+
     public void unreferenced()
     {
         try {

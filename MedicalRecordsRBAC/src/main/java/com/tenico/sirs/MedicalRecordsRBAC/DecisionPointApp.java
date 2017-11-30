@@ -26,10 +26,13 @@ public class DecisionPointApp extends DecisionPointBase {
 
             // process the results
             ResultSet rs = ps.executeQuery();
-            int id = rs.getInt("ClinicianID");
-            Specialty specialty = getSpecialty(rs.getString("SpecialtyID"));
 
-            c = new Clinician(id, specialty, username);
+            while (rs.next()) {
+                int id = rs.getInt("ClinicianID");
+                Specialty specialty = getSpecialty(rs.getString("SpecialtyID"));
+
+                c = new Clinician(id, specialty, username);
+            }
 
             rs.close();
             ps.close();
@@ -55,10 +58,13 @@ public class DecisionPointApp extends DecisionPointBase {
 
             // process the results
             ResultSet rs = ps.executeQuery();
-            String name = rs.getString("SpecialtyID");
-            SpecialityGroup group = new SpecialityGroup(rs.getString("SpecialtyGroupID"));
 
-            s = new Specialty(name, group);
+            while (rs.next()) {
+
+                String name = rs.getString("SpecialtyID");
+                SpecialityGroup group = new SpecialityGroup(rs.getString("SpecialtyGroupID"));
+                s = new Specialty(name, group);
+            }
 
             rs.close();
             ps.close();

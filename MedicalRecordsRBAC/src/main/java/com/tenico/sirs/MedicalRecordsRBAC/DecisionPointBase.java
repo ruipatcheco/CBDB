@@ -21,7 +21,8 @@ public abstract class DecisionPointBase {
         System.out.println("Loading driver...");
 
 
-        try (Connection mysqlConnection = DriverManager.getConnection(url, username, password)) {
+        try {
+            Connection mysqlConnection = DriverManager.getConnection(url, username, password);
             System.out.println("Database connected!");
             return mysqlConnection;
         } catch (SQLException e) {

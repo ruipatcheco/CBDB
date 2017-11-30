@@ -30,12 +30,15 @@ public class FrontEndImpl extends UnicastRemoteObject implements FrontEnd
 
 	public AppImpl login(String username, String passwordHash) throws LoginException, RemoteException{
         // name/password check; if it fails throw a LoginException
+        /*
         if(authenticator.verifyLogin(username, passwordHash)){
             return new AppImpl(username);
         }
     	else{
             throw new LoginException("Incorrect credentials");
         }
+        */
+        return new AppImpl(username);
     }
 	
 	public static void main(String[] args) throws RemoteException, IllegalArgumentException {

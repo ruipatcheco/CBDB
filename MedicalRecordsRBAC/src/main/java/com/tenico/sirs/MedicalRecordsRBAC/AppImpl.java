@@ -27,7 +27,7 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 		//construct Clinician from username;
 		this.dp = new DecisionPointApp();
 
-		this.loggedClinician = new Clinician(new Specialty("Osteopatia", null), name);
+		this.loggedClinician = this.dp.getClinician(username);
 	}
 
 
@@ -65,7 +65,7 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
     }
 
 	public String getLoggedClinicianName() throws RemoteException {
-		return this.loggedClinician.getName();
+		return this.loggedClinician.getUsername();
 	}
 
 }

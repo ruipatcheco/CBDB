@@ -27,7 +27,7 @@ public class DecisionPointApp extends DecisionPointBase {
             // process the results
             ResultSet rs = ps.executeQuery();
             int id = rs.getInt("ClinicianID");
-            String specialty = rs.getString("SpecialtyID");
+            Specialty specialty = getSpecialty(rs.getString("SpecialtyID"));
 
             c = new Clinician(id, specialty, username);
 
@@ -43,22 +43,22 @@ public class DecisionPointApp extends DecisionPointBase {
         return c;
     }
 
-    public Specialty getSpecialty (){
+    public Specialty getSpecialty (String specialty){
         Specialty s = null;
 
-        String query = "SELECT SpecialtyID, SpecialtyGroupID FROM SPECIALTY WHERE ClinicianUsername LIKE ?";
+        String query = "SELECT SpecialtyID, SpecialtyGroupID FROM SPECIALTY WHERE SpecialtyID LIKE ?";
         try
         {
-            // create the preparedstatement and add the criteria
+            // create the prepared statement and add the criteria
             java.sql.PreparedStatement ps = con.prepareStatement(query);
-            ps.setString(1,username);
+            ps.setString(1,specialty);
 
             // process the results
             ResultSet rs = ps.executeQuery();
-            int id = rs.getInt("ClinicianID");
-            String specialty = rs.getString("SpecialtyID");
+            String name = rs.getString("SpecialtyID");
+            SpecialityGroup group = new SpecialityGroup(rs.getString("SpecialtyGroupID"));
 
-            c = new Clinician(id, specialty, username);
+            s = new Specialty(name, group);
 
             rs.close();
             ps.close();
@@ -69,7 +69,7 @@ public class DecisionPointApp extends DecisionPointBase {
             se.printStackTrace();
         }
 
-        return c;
+        return s;
 
     }
 

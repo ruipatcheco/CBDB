@@ -3,6 +3,7 @@ package com.tenico.sirs.MedicalRecordsRBAC_Client;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -11,6 +12,8 @@ import javax.security.auth.login.LoginException;
 
 import com.tenico.sirs.CommonTypes.App;
 import com.tenico.sirs.CommonTypes.FrontEnd;
+
+import java.security.MessageDigest;
 
 
 public class AppClientSSL {
@@ -115,23 +118,23 @@ public class AppClientSSL {
 	    	
 	        System.out.print("Enter your password: ");
 	        String password = inputScanner.next();
-	        //TODO Should be passing a hash
-			/*
-					MessageDigest messageDigest = null;
 
-				try {
-					messageDigest = MessageDigest.getInstance("SHA-512");
-				} catch (NoSuchAlgorithmException e) {
-					System.out.println("SHA-512 not found");
-					e.printStackTrace();
-				}
+			//Hash The Password
+			MessageDigest messageDigest = null;
 
-				byte[] result = messageDigest.digest(input.getBytes());
+			try {
+				messageDigest = MessageDigest.getInstance("SHA-512");
+			} catch (NoSuchAlgorithmException e) {
+				System.out.println("SHA-512 not found");
+				e.printStackTrace();
+			}
 
-				String finalResult = new String(result);
-			* */
+			byte[] passwordHashBytes = messageDigest.digest(password.getBytes());
+
+			String passwordHash = new String(passwordHashBytes);
+
 	        try {
-	            App s = l.login(username, password);
+	            App s = l.login(username, passwordHash);
 	            return s;
 	        }
 	        catch(LoginException|RemoteException e){

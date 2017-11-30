@@ -8,7 +8,7 @@ public class Medical_Record {
 	private UUID id;
 	private UUID patient_id;
 	private UUID clinician_id;
-	private List<Speciality> specialities;
+	private List<Specialty> specialities;
 	private int hash;
 	private String recordInfo;
 	
@@ -17,15 +17,15 @@ public class Medical_Record {
 		this.id = UUID.randomUUID();
 		this.patient_id = patient_id;
 		this.clinician_id = clinician_id;
-		this.specialities = new ArrayList<Speciality>();
+		this.specialities = new ArrayList<Specialty>();
 		this.hash = hash;
 		this.recordInfo = recordInfo;
 	}
 	
-	public void addSpeciality(Speciality speciality) {
-		this.specialities.add(speciality);
+	public void addSpeciality(Specialty specialty) {
+		this.specialities.add(specialty);
 	}
-	public List<Speciality> getSpecialities() {
+	public List<Specialty> getSpecialities() {
 		return specialities;
 	}
 	public UUID getId() {

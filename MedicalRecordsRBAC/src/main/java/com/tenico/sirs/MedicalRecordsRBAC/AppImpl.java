@@ -21,12 +21,13 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
     private static final long serialVersionUID = 1L;
 	
 	private Clinician loggedClinician;
+	private DecisionPointApp dp;
 
-	public AppImpl(String name) throws RemoteException{
-		//construct Clinician from name;
+	public AppImpl(String username) throws RemoteException{
+		//construct Clinician from username;
+		this.dp = new DecisionPointApp();
 
-
-		this.loggedClinician = new Clinician(new Speciality("Osteopatia", null), name);
+		this.loggedClinician = new Clinician(new Specialty("Osteopatia", null), name);
 	}
 
 

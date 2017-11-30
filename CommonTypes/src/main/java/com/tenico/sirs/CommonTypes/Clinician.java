@@ -2,19 +2,18 @@ package com.tenico.sirs.CommonTypes;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Clinician {
-	private UUID id;
-	private Speciality speciality;
-	private String name;
+	private int id;
+	private Specialty specialty;
+	private String username;
 	private List<Patient_Clinician> patients_clinician;
 
-	public Clinician(Speciality speciality, String name) {
+	public Clinician(int id , Specialty specialty, String name) {
 
-		this.id = UUID.randomUUID();
-		this.setSpeciality(speciality);
-		this.setName(name);
+		this.id = id;
+		this.setSpecialty(specialty);
+		this.setUsername(name);
 		this.patients_clinician = new ArrayList<Patient_Clinician>();
 	}
 	
@@ -27,19 +26,19 @@ public class Clinician {
 		return this.id == ((Clinician)obj).id;
 	}
 
-	public String getName() {
-		return name;
+	public String getUsername() {
+		return this.username;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setUsername(String name) {
+		this.username = name;
 	}
 
-	public Speciality getSpeciality() {
-		return speciality;
+	public Specialty getSpecialty() {
+		return specialty;
 	}
 
-	public void setSpeciality(Speciality speciality) {
-		this.speciality = speciality;
+	public void setSpecialty(Specialty specialty) {
+		this.specialty = specialty;
 	}
 }

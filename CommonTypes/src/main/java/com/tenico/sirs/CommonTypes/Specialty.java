@@ -1,20 +1,12 @@
 package com.tenico.sirs.CommonTypes;
 
-public class Speciality {
+public class Specialty {
 	private String name;
 	private SpecialityGroup group;
 	
-	public Speciality(String name, SpecialityGroup group) {
+	public Specialty(String name, SpecialityGroup group) {
 		
 		this.setGroup(group);
-		this.setName(name);
-	}
-	
-	public Speciality(String name) {
-		
-		//TODO get specialty group from DB
-		
-		//this.setGroup(group);
 		this.setName(name);
 	}
 	

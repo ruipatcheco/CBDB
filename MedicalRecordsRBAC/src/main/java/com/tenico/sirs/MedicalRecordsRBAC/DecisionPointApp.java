@@ -86,7 +86,7 @@ public class DecisionPointApp extends DecisionPointBase {
 
     public List<Patient> getListPatients(Clinician cl)
     {
-        List<Patient> lista = new ArrayList<>();
+        List<Patient> lst = new ArrayList<>();
 
         String query = "SELECT PatientID FROM PATIENTS_CLINICIAN WHERE ClinicianID LIKE ?";
 
@@ -103,7 +103,7 @@ public class DecisionPointApp extends DecisionPointBase {
 
                 String patientID = rs.getString("PatientID");
                 Patient patient = new Patient(patientID, new Date(this.getPatientBirth(patientID)));
-                lista.add(patient);
+                lst.add(patient);
             }
 
             rs.close();
@@ -116,7 +116,7 @@ public class DecisionPointApp extends DecisionPointBase {
             se.printStackTrace();
         }
 
-        return lista;
+        return lst;
     }
 
 

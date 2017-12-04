@@ -73,6 +73,6 @@ INSERT INTO RECORD_SPECIALTIES (RSID, RecordID, SpecialtyID) VALUES (1, 1, 1);
 INSERT INTO RECORD_SPECIALTIES (RSID, RecordID, SpecialtyID) VALUES (2, 1, 2);
 INSERT INTO RECORD_SPECIALTIES (RSID, RecordID, SpecialtyID) VALUES (3, 1, 3);
 
-INSERT INTO LOGIN (Username, Salt, Hash, ClinicianID) VALUES ('andreanao', 'saltAndre', 'insert Hash here',1);
-INSERT INTO LOGIN (Username, Salt, Hash, ClinicianID) VALUES ('BernardoBernardino','saltBernardo', 'insert Hash here',1);
-INSERT INTO LOGIN (Username, Salt, Hash, ClinicianID) VALUES ('CarlosCarreira','saltCarlos', 'insert Hash here', 1);
+INSERT INTO LOGIN (Username, Salt, Hash, ClinicianID) VALUES ('AndreAnao', 'saltAndre', 'insert Hash here',1);
+INSERT INTO LOGIN (Username, Salt, Hash, ClinicianID) VALUES ('BernardoBernardino','saltBernardo', 'insert Hash here',2);
+INSERT INTO LOGIN (Username, Salt, Hash, ClinicianID) VALUES ('CarlosCarreira','saltCarlos', 'insert Hash here', 3);

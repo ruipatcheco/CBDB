@@ -78,7 +78,7 @@ public class FrontEndImpl extends UnicastRemoteObject implements FrontEnd
 
         System.setProperty("javax.net.ssl.debug", "all");
 
-	    System.setProperty("javax.net.ssl.keyStore", "/home/basilio/MEGAsync/SIRS/projeto/SSL/server.keystore.jks");
+	    System.setProperty("javax.net.ssl.keyStore", System.getProperty("user.dir") + "/SSL/server.keystore.jks");
 	    System.setProperty("javax.net.ssl.keyStorePassword", pass);
 	    //System.setProperty("javax.net.ssl.trustStore", "C:\\ssl\\servertruststore.jks");
 	    //System.setProperty("javax.net.ssl.trustStorePassword", pass);

@@ -151,7 +151,7 @@ public class AppClientSSL {
         System.setProperty("javax.net.ssl.debug", "all");
         //System.setProperty("javax.net.ssl.keyStore", "C:\\ssl\\clientkeystore.jks");
 	    //System.setProperty("javax.net.ssl.keyStorePassword", pass);
-        System.setProperty("javax.net.ssl.trustStore", "/home/basilio/MEGAsync/SIRS/projeto/SSL/client/client.truststore.jks");
+		System.setProperty("javax.net.ssl.trustStore", System.getProperty("user.dir") + "/SSL/client/client.truststore.jks");
 	    System.setProperty("javax.net.ssl.trustStorePassword", pass);
     }
 

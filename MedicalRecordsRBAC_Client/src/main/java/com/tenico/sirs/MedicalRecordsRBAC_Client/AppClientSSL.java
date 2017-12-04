@@ -139,7 +139,7 @@ public class AppClientSSL {
 	        }
 	        catch(LoginException|RemoteException e){
 	            System.out.println("FrontEnd failed, try again");
-	            e.printStackTrace();
+	            //e.printStackTrace();
 	        }
     	}
 

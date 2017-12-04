@@ -40,7 +40,8 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 
     @Override
     public List<Patient> listPatients() throws RemoteException {
-        return null;
+        List<Patient> lista = this.dp.getListPatients(this.loggedClinician);
+        return lista;
     }
 
     @Override

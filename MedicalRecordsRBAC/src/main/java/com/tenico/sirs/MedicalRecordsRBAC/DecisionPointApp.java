@@ -2,11 +2,13 @@ package com.tenico.sirs.MedicalRecordsRBAC;
 
 import com.mysql.jdbc.PreparedStatement;
 import com.tenico.sirs.CommonTypes.Clinician;
+import com.tenico.sirs.CommonTypes.Patient;
 import com.tenico.sirs.CommonTypes.SpecialityGroup;
 import com.tenico.sirs.CommonTypes.Specialty;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class DecisionPointApp extends DecisionPointBase {
 
@@ -77,6 +79,11 @@ public class DecisionPointApp extends DecisionPointBase {
 
         return s;
 
+    }
+
+    public List<Patient> getListPatients(Clinician cl)
+    {
+        return null;
     }
 
 

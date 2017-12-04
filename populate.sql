@@ -59,9 +59,9 @@ INSERT INTO PATIENTS (PatientID, PatientName, DateOfBirth) VALUES (1,'Ana Maria'
 INSERT INTO PATIENTS (PatientID, PatientName, DateOfBirth) VALUES (2,'Beatriz Manuela', '2010-02-02' );
 INSERT INTO PATIENTS (PatientID, PatientName, DateOfBirth) VALUES (3,'Carlos José', '2000-05-17');
 
-INSERT INTO CLINICIAN (ClinicianID, SpecialtyID, ClinicianUsername) VALUES (1, 'Cardiology', 'André Anão');
-INSERT INTO CLINICIAN (ClinicianID, SpecialtyID, ClinicianUsername) VALUES (2, 'Interventional Radiology', 'Bernardo Bernardino');
-INSERT INTO CLINICIAN (ClinicianID, SpecialtyID, ClinicianUsername) VALUES (3, 'Neurosurgery', 'Carlos Carreira');
+INSERT INTO CLINICIAN (ClinicianID, SpecialtyID, ClinicianUsername, ClinicianName) VALUES (1, 'Cardiology', 'AndreAnao', 'André Anão');
+INSERT INTO CLINICIAN (ClinicianID, SpecialtyID, ClinicianUsername, ClinicianName) VALUES (2, 'Interventional Radiology', 'BernardoBernardino', 'Bernardo Bernardino');
+INSERT INTO CLINICIAN (ClinicianID, SpecialtyID, ClinicianUsername, ClinicianName) VALUES (3, 'Neurosurgery', 'CarlosCarreira', 'Carlos Carreira');
 
 INSERT INTO PATIENTS_CLINITIAN (PDID, PatientID, ClinicianID) VALUES (1, 1, 1);
 INSERT INTO PATIENTS_CLINITIAN (PDID, PatientID, ClinicianID) VALUES (2, 2, 2);

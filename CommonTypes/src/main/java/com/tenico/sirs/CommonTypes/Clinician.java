@@ -41,4 +41,6 @@ public class Clinician {
 	public void setSpecialty(Specialty specialty) {
 		this.specialty = specialty;
 	}
+
+	public int getID() { return id; }
 }

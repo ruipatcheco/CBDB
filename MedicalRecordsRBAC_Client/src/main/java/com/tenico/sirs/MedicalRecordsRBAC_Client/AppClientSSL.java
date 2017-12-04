@@ -10,6 +10,7 @@ import java.util.UUID;
 import javax.rmi.ssl.SslRMIClientSocketFactory;
 import javax.security.auth.login.LoginException;
 
+import com.sun.xml.internal.ws.api.message.Message;
 import com.tenico.sirs.CommonTypes.App;
 import com.tenico.sirs.CommonTypes.FrontEnd;
 
@@ -131,7 +132,7 @@ public class AppClientSSL {
 
 			byte[] passwordHashBytes = messageDigest.digest(password.getBytes());
 
-			String passwordHash = new String(passwordHashBytes);
+			String passwordHash = tohex(passwordHashBytes);
 
 	        try {
 	            App s = l.login(username, passwordHash);
@@ -144,6 +145,14 @@ public class AppClientSSL {
     	}
 
     }
+
+	public static String tohex(byte[] data) {
+		StringBuilder sb = new StringBuilder(data.length * 2);
+		for (int i = 0; i < data.length; i++) {
+			sb.append(String.format("%02X", data[i] & 0xFF));
+		}
+		return sb.toString();
+	}
 
     private static void setSettings() {
 

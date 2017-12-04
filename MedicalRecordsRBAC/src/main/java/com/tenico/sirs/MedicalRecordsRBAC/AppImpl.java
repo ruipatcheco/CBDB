@@ -4,8 +4,7 @@ import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.server.Unreferenced;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import com.tenico.sirs.CommonTypes.*;
 
@@ -20,7 +19,7 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 
     private static final long serialVersionUID = 1L;
 	
-	private Clinician loggedClinician;
+	private Clinician loggedClinician = null;
 	private DecisionPointApp dp;
 
 	public AppImpl(String username) throws RemoteException{
@@ -28,6 +27,8 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 		this.dp = new DecisionPointApp();
 
 		this.loggedClinician = this.dp.getClinician(username);
+
+
 	}
 
 
@@ -39,8 +40,14 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 	}
 
     @Override
-    public List<Patient> listPatients() throws RemoteException {
-        return this.dp.getListPatients(this.loggedClinician);
+    public Map<UUID, String> listPatients() throws RemoteException {
+        List<Patient> lst = this.dp.getListPatients(this.loggedClinician);
+        Map<UUID, String> result = new HashMap<>();
+        for(Patient pt : lst)
+		{
+			result.put(pt.getId(),pt.getName());
+		}
+        return result;
     }
 
     @Override

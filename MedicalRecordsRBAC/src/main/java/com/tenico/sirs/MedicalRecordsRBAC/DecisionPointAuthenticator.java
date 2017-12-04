@@ -25,7 +25,7 @@ public class DecisionPointAuthenticator extends DecisionPointBase {
         String salt = null;
         String storedHash = null;
         Statement stmt = null;
-        String query = "SELECT Salt FROM CBDB.Login WHERE Username = '" + username + "'";
+        String query = "SELECT Salt, Hash FROM CBDB.LOGIN WHERE Username = '" + username + "'";
 
         /*
         * Should be using PreparedStatements to protect from sql injections
@@ -61,6 +61,7 @@ public class DecisionPointAuthenticator extends DecisionPointBase {
 
         String input = passwordHash + salt;
 
+
         MessageDigest messageDigest = null;
 
         try {
@@ -72,9 +73,17 @@ public class DecisionPointAuthenticator extends DecisionPointBase {
 
         byte[] result = messageDigest.digest(input.getBytes());
 
-        String finalResult = new String(result);
+        String finalResult = tohex(result);
 
         return finalResult.equals(storedHash);
+    }
+
+    public static String tohex(byte[] data) {
+        StringBuilder sb = new StringBuilder(data.length * 2);
+        for (int i = 0; i < data.length; i++) {
+            sb.append(String.format("%02X", data[i] & 0xFF));
+        }
+        return sb.toString();
     }
 
 }

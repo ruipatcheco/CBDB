@@ -22,7 +22,7 @@ public class DecisionPointApp extends DecisionPointBase {
     public Clinician getClinician(String username){
         Clinician c = null;
 
-        String query = "SELECT ClinicianID, SpecialtyID, ClinicianUsername FROM CLINICIAN WHERE ClinicianUsername LIKE ?";
+        String query = "SELECT ClinicianID, SpecialtyID FROM CLINICIAN WHERE ClinicianUsername LIKE ?";
         try
         {
             // create the preparedstatement and add the criteria
@@ -47,6 +47,8 @@ public class DecisionPointApp extends DecisionPointBase {
             // log exception;
             se.printStackTrace();
         }
+
+
 
         return c;
     }
@@ -88,21 +90,21 @@ public class DecisionPointApp extends DecisionPointBase {
     {
         List<Patient> lst = new ArrayList<>();
 
-        String query = "SELECT PatientID FROM PATIENTS_CLINICIAN WHERE ClinicianID LIKE ?";
+        String query = "SELECT PatientID FROM PATIENTS_CLINITIAN WHERE ClinicianID LIKE ?";
 
         try
         {
             // create the prepared statement and add the criteria
             java.sql.PreparedStatement ps = con.prepareStatement(query);
-            ps.setString(1, "" + cl.getID());
+            ps.setInt(1, cl.getID());
 
             // process the results
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
 
-                String patientID = rs.getString("PatientID");
-                Patient patient = new Patient(patientID, new Date(this.getPatientBirth(patientID)));
+                int patientID = rs.getInt("PatientID");
+                Patient patient = new Patient(this.getPatientNameFromID(patientID), new Date(this.getPatientBirth(patientID)));
                 lst.add(patient);
             }
 
@@ -119,8 +121,40 @@ public class DecisionPointApp extends DecisionPointBase {
         return lst;
     }
 
+    public String getPatientNameFromID(int id)
+    {
+        String name = null;
 
-    public long getPatientBirth(String patientID) {
+        String query = "SELECT PatientName FROM CBDB.PATIENTS WHERE PatientID LIKE ?";
+
+        try
+        {
+            java.sql.PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, id);
+
+            // process the results
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                name = rs.getString("PatientName");
+            }
+
+            rs.close();
+            ps.close();
+
+        }
+        catch (SQLException se)
+        {
+            // log exception;
+            se.printStackTrace();
+        }
+
+        return name;
+    }
+
+
+    public long getPatientBirth(int patientID) {
         long date = 000000;
 
         String query = "SELECT DateOfBirth FROM CBDB.PATIENTS WHERE PatientID LIKE ?";
@@ -128,7 +162,7 @@ public class DecisionPointApp extends DecisionPointBase {
         try
         {
             java.sql.PreparedStatement ps = con.prepareStatement(query);
-            ps.setString(1, patientID);
+            ps.setInt(1, patientID);
 
             // process the results
             ResultSet rs = ps.executeQuery();

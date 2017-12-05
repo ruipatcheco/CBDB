@@ -1,10 +1,7 @@
 package com.tenico.sirs.MedicalRecordsRBAC;
 
 import com.mysql.jdbc.PreparedStatement;
-import com.tenico.sirs.CommonTypes.Clinician;
-import com.tenico.sirs.CommonTypes.Patient;
-import com.tenico.sirs.CommonTypes.SpecialityGroup;
-import com.tenico.sirs.CommonTypes.Specialty;
+import com.tenico.sirs.CommonTypes.*;
 import sun.util.calendar.Gregorian;
 
 import java.sql.Date;
@@ -12,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class DecisionPointApp extends DecisionPointBase {
 
@@ -184,5 +182,17 @@ public class DecisionPointApp extends DecisionPointBase {
 
         return date;
 
+    }
+
+    public Medical_Record viewMedicalRecord(UUID record_id, Clinician loggedClinician) {
+
+        // check if Clinician has access to that record
+
+        // if true, retrieve from DB and return to App
+
+        // if false, return null
+
+
+        return null;
     }
 }

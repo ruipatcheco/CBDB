@@ -27,10 +27,7 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 		this.dp = new DecisionPointApp();
 
 		this.loggedClinician = this.dp.getClinician(username);
-
-
 	}
-
 
     @Override
 	public void logout() throws RemoteException {
@@ -52,22 +49,16 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 
     @Override
     public Medical_Record viewMedicalRecord(UUID record_id) throws RemoteException {
-		//TODO
+		Medical_Record record = this.dp.viewMedicalRecord(record_id, this.loggedClinician);
         return null;
     }
 
     @Override
     public List<Medical_Record> viewPatientRecords(UUID patient_id) throws RemoteException {
-		//TODO
+
         return null;
     }
 
-	@Override
-    public Patient RegisterPatient(String name, Date birth) throws RemoteException
-	{
-		//TODO Patient is not Serializable so we must return something else
-		return null;
-	}
 
 	@Override
 	public Clinician RegisterClinician(int id, String specialty, String name) throws RemoteException
@@ -76,12 +67,6 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 		return null;
 	}
 
-	@Override
-	public Date addAppointment(Clinician cl , Patient pt, Date date) throws RemoteException
-	{
-		//TODO Who can add time ?
-		return null;
-	}
 
 	@Override
 	public void addMedicalRecord(Patient patient, Medical_Record mr) throws RemoteException

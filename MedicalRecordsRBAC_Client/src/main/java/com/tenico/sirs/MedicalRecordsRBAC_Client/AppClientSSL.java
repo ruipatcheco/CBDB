@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -76,38 +77,49 @@ public class AppClientSSL {
 		String str = input;
 		String[] splitStr = str.split("\\s+");
 
-    	Command c = Command.valueOf(splitStr[0]);
-    	
-    	switch(c) {
-    		case help:
-            	System.out.println("Commands: lp (listPatients), la (listAppointments), vmr (viewMedicalRecord), vpr (viewPatientRecords), whoami, help, exit");
-            	break;
-    		case exit:
-    			s.logout();
-    			return true;
-    		case whoami:
-    			System.out.println(s.getLoggedClinicianName());
-				break;
+		try
+		{
+			Command c = Command.valueOf(splitStr[0]);
 
-			case vpr:
-				UUID patient_id = UUID.fromString(splitStr[1]);
-				System.out.println(s.viewPatientRecords(patient_id));
-				break;
+			switch(c) {
+				case help:
+					System.out.println("Commands: lp (listPatients), la (listAppointments), vmr (viewMedicalRecord), vpr (viewPatientRecords), whoami, help, exit");
+					break;
+				case exit:
+					s.logout();
+					return true;
+				case whoami:
+					System.out.println(s.getLoggedClinicianName());
+					break;
 
-			case vmr:
-				UUID record_id = UUID.fromString(splitStr[1]);
-				System.out.println(s.viewMedicalRecord(record_id));
-				break;
+				case vpr:
+					UUID patient_id = UUID.fromString(splitStr[1]);
+					System.out.println(s.viewPatientRecords(patient_id));
+					break;
 
-			case lp:
-				System.out.println(s.listPatients());
-				break;
+				case vmr:
+					UUID record_id = UUID.fromString(splitStr[1]);
+					System.out.println(s.viewMedicalRecord(record_id));
+					break;
 
-			default:
-				System.out.println("Commands: lp (listPatients), la (listAppointments), vmr (viewMedicalRecord), vpr (viewPatientRecords), whoami, help, exit");
-				break;
-    	}
-    	
+				case lp:
+					Map<UUID,String> result = s.listPatients();
+					for (Map.Entry<UUID, String> entry : result.entrySet())
+					{
+						System.out.println("PATIENT: " + entry.getValue() + " ID: " + entry.getKey());
+					}
+					break;
+
+				default:
+					System.out.println("Commands: lp (listPatients), la (listAppointments), vmr (viewMedicalRecord), vpr (viewPatientRecords), whoami, help, exit");
+					break;
+			}
+		}
+		catch(IllegalArgumentException e)
+		{
+			System.out.println("Commands: lp (listPatients), la (listAppointments), vmr (viewMedicalRecord), vpr (viewPatientRecords), whoami, help, exit");
+		}
+
     	return false;
 	}
 

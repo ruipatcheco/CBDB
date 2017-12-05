@@ -11,16 +11,10 @@ import java.util.UUID;
 
 public interface App extends Remote
 {
-    Patient RegisterPatient(String name, Date birth) throws RemoteException;
 
     Clinician RegisterClinician(int id, String specialty, String name) throws RemoteException;
-
-    Date addAppointment(Clinician cl, Patient pt, Date date) throws RemoteException;
-
     void addMedicalRecord(Patient patient, Medical_Record mr) throws RemoteException;
-
     void EmergencyButton() throws RemoteException;
-
     String getLoggedClinicianName() throws RemoteException;
     void logout() throws RemoteException;
     Map<UUID, String> listPatients() throws RemoteException;

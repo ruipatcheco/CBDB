@@ -43,7 +43,6 @@ INSERT INTO SPECIALTY (SpecialtyID, SpecialtyGroupID) VALUES ('Paediatric Nephro
 INSERT INTO SPECIALTY (SpecialtyID, SpecialtyGroupID) VALUES ('Paediatric Respiratory Medicine','Paediatrics');
 INSERT INTO SPECIALTY (SpecialtyID, SpecialtyGroupID) VALUES ('Paediatric Rheumatology','Paediatrics');
 
-
 INSERT INTO SPECIALTY (SpecialtyID, SpecialtyGroupID) VALUES ('Neurosurgery','Surgery');
 INSERT INTO SPECIALTY (SpecialtyID, SpecialtyGroupID) VALUES ('Oral and Maxillofacial Surgery','Surgery');
 
@@ -67,11 +66,11 @@ INSERT INTO PATIENTS_CLINITIAN (PDID, PatientID, ClinicianID) VALUES (1, 1, 1);
 INSERT INTO PATIENTS_CLINITIAN (PDID, PatientID, ClinicianID) VALUES (2, 2, 2);
 INSERT INTO PATIENTS_CLINITIAN (PDID, PatientID, ClinicianID) VALUES (3, 3, 3);
 
-INSERT INTO MEDICAL_RECORDS (RecordID, PatientID, ClinicianID, RecordHash) VALUES (1, 1, 1, 'insert record hash here' );
+INSERT INTO MEDICAL_RECORDS (RID, PatientID, ClinicianID, RecordHash) VALUES (1, 1, 1, 'insert record hash here' );
 
-INSERT INTO RECORD_SPECIALTIES (RSID, RecordID, SpecialtyID) VALUES (1, 1, 1);
-INSERT INTO RECORD_SPECIALTIES (RSID, RecordID, SpecialtyID) VALUES (2, 1, 2);
-INSERT INTO RECORD_SPECIALTIES (RSID, RecordID, SpecialtyID) VALUES (3, 1, 3);
+INSERT INTO RECORD_SPECIALTIES (RSID, RID, SpecialtyGroupID) VALUES (1, 1, 1);
+INSERT INTO RECORD_SPECIALTIES (RSID, RID, SpecialtyGroupID) VALUES (2, 1, 2);
+INSERT INTO RECORD_SPECIALTIES (RSID, RID, SpecialtyGroupID) VALUES (3, 1, 3);
 
 /*PASSWORDS EQUAL TO USERNAMES*/
 /*HASH = SHA-512( SHA-512(password) + salt ) */

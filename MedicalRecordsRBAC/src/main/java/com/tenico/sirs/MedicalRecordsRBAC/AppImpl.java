@@ -52,13 +52,48 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 
     @Override
     public Medical_Record viewMedicalRecord(UUID record_id) throws RemoteException {
+		//TODO
         return null;
     }
 
     @Override
     public List<Medical_Record> viewPatientRecords(UUID patient_id) throws RemoteException {
+		//TODO
         return null;
     }
+
+	@Override
+    public Patient RegisterPatient(String name, Date birth) throws RemoteException
+	{
+		//TODO Patient is not Serializable so we must return something else
+		return null;
+	}
+
+	@Override
+	public Clinician RegisterClinician(int id, String specialty, String name) throws RemoteException
+	{
+		//TODO Who can register a clinician ? Clinician is not Serializable so we must return something else
+		return null;
+	}
+
+	@Override
+	public Date addAppointment(Clinician cl , Patient pt, Date date) throws RemoteException
+	{
+		//TODO Who can add time ?
+		return null;
+	}
+
+	@Override
+	public void addMedicalRecord(Patient patient, Medical_Record mr) throws RemoteException
+	{
+		//TODO Clinician this adds Medical Record mr to Patient patient
+	}
+
+	@Override
+	public void EmergencyButton() throws RemoteException
+	{
+		//TODO
+	}
 
 
     public void unreferenced()

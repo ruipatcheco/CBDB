@@ -8,6 +8,9 @@ import java.util.*;
 
 import com.tenico.sirs.CommonTypes.*;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 
 	/**
@@ -21,12 +24,24 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 	
 	private Clinician loggedClinician = null;
 	private DecisionPointApp dp;
+	private List<Patient> lstPatients;
 
 	public AppImpl(String username) throws RemoteException{
 		//construct Clinician from username;
 		this.dp = new DecisionPointApp();
-
 		this.loggedClinician = this.dp.getClinician(username);
+		this.lstPatients = this.dp.getListPatients(this.loggedClinician);
+		if(this.lstPatients.size() > 0) {
+			for (Patient patient : this.lstPatients) {
+				this.loggedClinician.Add_Patient(new Patient_Clinician(patient.getId(), this.loggedClinician.getID()));
+				List<Medical_Record> lst = this.dp.viewPatientRecords(this.loggedClinician, patient);
+				if (lst.size() > 0) {
+					for (Medical_Record mr : lst) {
+						patient.addRecord(mr);
+					}
+				}
+			}
+		}
 	}
 
     @Override
@@ -37,26 +52,33 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 	}
 
     @Override
-    public Map<UUID, String> listPatients() throws RemoteException {
-        List<Patient> lst = this.dp.getListPatients(this.loggedClinician);
-        Map<UUID, String> result = new HashMap<>();
-        for(Patient pt : lst)
-		{
+    public Map<Integer, String> listPatients() throws RemoteException {
+        Map<Integer, String> result = new HashMap<>();
+        for(Patient pt : this.lstPatients) {
 			result.put(pt.getId(),pt.getName());
 		}
         return result;
     }
 
     @Override
-    public Medical_Record viewMedicalRecord(UUID record_id) throws RemoteException {
+    public Medical_Record viewMedicalRecord(int record_id) throws RemoteException {
 		Medical_Record record = this.dp.viewMedicalRecord(record_id, this.loggedClinician);
         return null;
     }
 
     @Override
-    public List<Medical_Record> viewPatientRecords(UUID patient_id) throws RemoteException {
+    public JTable viewPatientRecords(int patient_id) throws RemoteException {
+		JTable table = new JTable(new DefaultTableModel(new Object[]{"ID", "Clinician", "Info"}, 0));
 
-        return null;
+		for(Patient patient : this.lstPatients)
+		{
+			for(Medical_Record mr : patient.getRecords())
+			{
+				DefaultTableModel model = (DefaultTableModel) table.getModel();
+				model.addRow(new Object[]{mr.getId(),this.loggedClinician.getName(),mr.getInfo()});
+			}
+		}
+        return table;
     }
 
 

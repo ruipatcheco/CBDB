@@ -20,7 +20,7 @@ public class DecisionPointApp extends DecisionPointBase {
     public Clinician getClinician(String username){
         Clinician c = null;
 
-        String query = "SELECT ClinicianID, SpecialtyID FROM CLINICIAN WHERE ClinicianUsername LIKE ?";
+        String query = "SELECT ClinicianID, SpecialtyID, ClinicianName FROM CLINICIAN WHERE ClinicianUsername LIKE ?";
         try
         {
             // create the preparedstatement and add the criteria
@@ -33,8 +33,9 @@ public class DecisionPointApp extends DecisionPointBase {
             while (rs.next()) {
                 int id = rs.getInt("ClinicianID");
                 Specialty specialty = getSpecialty(rs.getString("SpecialtyID"));
+                String name = rs.getString("ClinicianName");
 
-                c = new Clinician(id, specialty, username);
+                c = new Clinician(id, specialty, username, name);
             }
 
             rs.close();
@@ -102,7 +103,7 @@ public class DecisionPointApp extends DecisionPointBase {
             while (rs.next()) {
 
                 int patientID = rs.getInt("PatientID");
-                Patient patient = new Patient(this.getPatientNameFromID(patientID), new Date(this.getPatientBirth(patientID)));
+                Patient patient = new Patient(patientID, this.getPatientNameFromID(patientID), new Date(this.getPatientBirth(patientID)));
                 lst.add(patient);
             }
 
@@ -184,15 +185,108 @@ public class DecisionPointApp extends DecisionPointBase {
 
     }
 
-    public Medical_Record viewMedicalRecord(UUID record_id, Clinician loggedClinician) {
-
-        // check if Clinician has access to that record
-
-        // if true, retrieve from DB and return to App
-
-        // if false, return null
-
+    public Medical_Record viewMedicalRecord(int record_id, Clinician loggedClinician) {
 
         return null;
+    }
+
+    public List<Medical_Record> viewPatientRecords(Clinician cl, Patient patient) {
+        List<Medical_Record> result = null;
+
+        List<Integer> RIDS = new ArrayList<>();
+
+        String query = "SELECT RID FROM CBDB.MEDICAL_RECORDS WHERE PatientID LIKE ?";
+
+        try
+        {
+            java.sql.PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, patient.getId());
+
+            // process the results
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("RID");
+                RIDS.add(id);
+            }
+
+            rs.close();
+            ps.close();
+
+        }
+        catch (SQLException se)
+        {
+            // log exception;
+            se.printStackTrace();
+        }
+
+        if(RIDS.size() > 0)
+        {
+            query = "SELECT RID FROM RECORD_SPECIALTIES WHERE RECORD_SPECIALTIES.RID LIKE ? " +
+                    "AND RECORD_SPECIALTIES.SpecialtyGroupID LIKE ?";
+
+            List<Integer> RIDSFinal = new ArrayList<>();
+
+            for(Integer rid : RIDS)
+            {
+                try
+                {
+                    java.sql.PreparedStatement ps = con.prepareStatement(query);
+                    ps.setInt(1, rid);
+                    ps.setString(2, cl.getSpecialty().getGroup().getName());
+
+                    // process the results
+                    ResultSet rs = ps.executeQuery();
+
+                    while (rs.next()) {
+                        int rid1 = rs.getInt("RID");
+                        RIDSFinal.add(rid1);
+                    }
+
+                    rs.close();
+                    ps.close();
+
+                }
+                catch (SQLException se)
+                {
+                    // log exception;
+                    se.printStackTrace();
+                }
+            }
+
+            if(RIDSFinal.size() > 0)
+            {
+                result = new ArrayList<>();
+
+                query = "SELECT RecordHash, RecordInfo FROM CBDB.MEDICAL_RECORDS WHERE MEDICAL_RECORDS.RID LIKE ?";
+
+                for(Integer rid : RIDSFinal) {
+
+                    try {
+                        java.sql.PreparedStatement ps = con.prepareStatement(query);
+                        ps.setInt(1, rid);
+
+                        // process the results
+                        ResultSet rs = ps.executeQuery();
+
+                        while (rs.next()) {
+                            String hash = rs.getString("RecordHash");
+                            String info = rs.getString("RecordInfo");
+                            result.add(new Medical_Record(rid, patient.getId(), cl.getID(), hash, info));
+                        }
+
+                        rs.close();
+                        ps.close();
+
+                    } catch (SQLException se) {
+                        // log exception;
+                        se.printStackTrace();
+                    }
+                }
+            }
+        }
+
+
+        return result;
     }
 }

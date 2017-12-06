@@ -2,24 +2,23 @@ package com.tenico.sirs.CommonTypes;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Medical_Record {
-	private UUID id;
-	private UUID patient_id;
-	private UUID clinician_id;
+	private int id;
+	private int patient_id;
+	private int clinician_id;
 	private List<Specialty> specialities;
-	private int hash;
-	private String recordInfo;
+	private String hash;
+	private String info;
 	
 	
-	public Medical_Record(UUID patient_id, UUID clinician_id, int hash, String recordInfo) {
-		this.id = UUID.randomUUID();
+	public Medical_Record(int rid, int patient_id, int clinician_id, String hash, String info) {
+		this.id = rid;
 		this.patient_id = patient_id;
 		this.clinician_id = clinician_id;
 		this.specialities = new ArrayList<Specialty>();
 		this.hash = hash;
-		this.recordInfo = recordInfo;
+		this.info = info;
 	}
 	
 	public void addSpeciality(Specialty specialty) {
@@ -28,35 +27,32 @@ public class Medical_Record {
 	public List<Specialty> getSpecialities() {
 		return specialities;
 	}
-	public UUID getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(UUID id) {
+	public void setId(int id) {
 		this.id = id;
 	}
-	public UUID getPatient_id() {
+	public int getPatient_id() {
 		return patient_id;
 	}
-	public void setPatient_id(UUID patient_id) {
+	public void setPatient_id(int patient_id) {
 		this.patient_id = patient_id;
 	}
-	public UUID getClinician_id() {
+	public int getClinician_id() {
 		return clinician_id;
 	}
-	public void setClinician_id(UUID clinician_id) {
+	public void setClinician_id(int clinician_id) {
 		this.clinician_id = clinician_id;
 	}
-	public String getRecordInfo() {
-		return this.recordInfo;
-	}
-	public void setRecordInfo(String recordInfo) {
-		this.recordInfo = recordInfo;
-	}
-	public int getHash() {
+	public String getHash() {
 		return hash;
 	}
-	public void setHash(int hash) {
+	public void setHash(String hash) {
 		this.hash = hash;
 	}
 
+    public Object getInfo() {
+        return this.info;
+    }
 }

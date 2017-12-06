@@ -8,14 +8,17 @@ public class Clinician {
 	private Specialty specialty;
 	private String username;
 	private List<Patient_Clinician> patients_clinician;
+	private String name;
 
-	public Clinician(int id , Specialty specialty, String name) {
+	public Clinician(int id , Specialty specialty, String username, String name) {
 
 		this.id = id;
 		this.setSpecialty(specialty);
-		this.setUsername(name);
+		this.setUsername(username);
+		this.name = name;
 		this.patients_clinician = new ArrayList<Patient_Clinician>();
 	}
+	public String getName() { return this.name; }
 	
 	public void Add_Patient(Patient_Clinician patient_clinician) {
 		this.patients_clinician.add(patient_clinician);

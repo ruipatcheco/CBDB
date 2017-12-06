@@ -1,5 +1,6 @@
 package com.tenico.sirs.MedicalRecordsRBAC_Client;
 
+import java.awt.print.PrinterException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -10,6 +11,7 @@ import java.util.UUID;
 
 import javax.rmi.ssl.SslRMIClientSocketFactory;
 import javax.security.auth.login.LoginException;
+import javax.swing.*;
 
 import com.sun.xml.internal.ws.api.message.Message;
 import com.tenico.sirs.CommonTypes.App;
@@ -55,7 +57,7 @@ public class AppClientSSL {
     	while(true) {
     		try {
 				if(logout) {return;}
-		        input = inputScanner.next();
+		        input = inputScanner.nextLine();
 		        
 		        if (!input.isEmpty()) {
 		            logout = parseCommand(input, s);
@@ -77,13 +79,14 @@ public class AppClientSSL {
 		String str = input;
 		String[] splitStr = str.split("\\s+");
 
+
 		try
 		{
 			Command c = Command.valueOf(splitStr[0]);
 
 			switch(c) {
 				case help:
-					System.out.println("Commands: lp (listPatients), la (listAppointments), vmr (viewMedicalRecord), vpr (viewPatientRecords), whoami, help, exit");
+					System.out.println("Commands: lp (listPatients), vmr (viewMedicalRecord), vpr (viewPatientRecords), whoami, help, exit");
 					break;
 				case exit:
 					s.logout();
@@ -93,20 +96,27 @@ public class AppClientSSL {
 					break;
 
 				case vpr:
-					UUID patient_id = UUID.fromString(splitStr[1]);
-					System.out.println(s.viewPatientRecords(patient_id));
+					int patient_id = Integer.parseInt(splitStr[1]);
+					JTable tabl = s.viewPatientRecords(patient_id);
+					int i = 0;
+					while(i < tabl.getRowCount())
+					{
+						System.out.println("ID: " + tabl.getModel().getValueAt(i,0) + " CLINICIAN: " +
+						tabl.getModel().getValueAt(i,1) + " INFO: " + tabl. getModel().getValueAt(i, 2));
+						i++;
+					}
 					break;
 
 				case vmr:
-					UUID record_id = UUID.fromString(splitStr[1]);
+					int record_id = Integer.parseInt(splitStr[1]);
 					System.out.println(s.viewMedicalRecord(record_id));
 					break;
 
 				case lp:
-					Map<UUID,String> result = s.listPatients();
-					for (Map.Entry<UUID, String> entry : result.entrySet())
+					Map<Integer,String> result = s.listPatients();
+					for (Map.Entry<Integer, String> entry : result.entrySet())
 					{
-						System.out.println("PATIENT: " + entry.getValue() + " ID: " + entry.getKey());
+						System.out.println("ID: " + entry.getKey() + " PATIENT: " + entry.getValue());
 					}
 					break;
 
@@ -120,7 +130,7 @@ public class AppClientSSL {
 			System.out.println("Commands: lp (listPatients), la (listAppointments), vmr (viewMedicalRecord), vpr (viewPatientRecords), whoami, help, exit");
 		}
 
-    	return false;
+		return false;
 	}
 
 	private static App loginManager(FrontEnd l, Scanner inputScanner) {

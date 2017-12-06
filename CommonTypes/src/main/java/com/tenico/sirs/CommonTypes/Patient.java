@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.UUID;
 
 public class Patient {
-	private UUID id;
+	private int id;
 	private String name;
 	private Date date_of_birth;
 	private List<Medical_Record> records;
 	
-	public Patient(String name, Date date_of_brith) {
-		this.id = UUID.randomUUID();
+	public Patient(int bdid, String name, Date date_of_brith) {
+		this.id = bdid;
 		this.setName(name);
 		this.setDate_of_birth(date_of_brith);
 		this.records = new ArrayList<Medical_Record>();
@@ -24,10 +24,10 @@ public class Patient {
 	public List<Medical_Record> getRecords() {
 		return this.records;
 	}
-	public UUID getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(UUID id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getName() {

@@ -1,0 +1,5 @@
+Wed Dec 06 01:32:31 WET 2017: Logged Out
+Wed Dec 06 01:32:48 WET 2017 : Logged In
+Wed Dec 06 01:32:58 WET 2017: Listed Patients
+Wed Dec 06 01:32:59 WET 2017: Listed Patients
+Wed Dec 06 01:33:02 WET 2017: Logged Out

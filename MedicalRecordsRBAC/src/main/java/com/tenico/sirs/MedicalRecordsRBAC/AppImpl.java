@@ -1,5 +1,6 @@
 package com.tenico.sirs.MedicalRecordsRBAC;
 
+import java.io.IOException;
 import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -10,6 +11,9 @@ import com.tenico.sirs.CommonTypes.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import java.io.File;
+import java.io.FileWriter;
 
 public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 
@@ -26,10 +30,29 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 	private DecisionPointApp dp;
 	private List<Patient> lstPatients;
 
+	private File log = null;
+	private FileWriter fw = null;
+	private String logFileName = null;
+
+
 	public AppImpl(String username) throws RemoteException{
 		//construct Clinician from username;
 		this.dp = new DecisionPointApp();
 		this.loggedClinician = this.dp.getClinician(username);
+		this.logFileName = System.getProperty("user.dir") + "/MedicalRecordsRBAC/src/logs/" +
+				this.loggedClinician.getUsername() + ".txt";
+		this.log = new File(logFileName);
+
+		try {
+			log.createNewFile();
+			this.fw = new FileWriter(logFileName, true);
+			Date date = new Date();
+			this.fw.append( date.toString() + ": Logged In\n" );
+			fw.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		this.lstPatients = this.dp.getListPatients(this.loggedClinician);
 		if(this.lstPatients.size() > 0) {
 			for (Patient patient : this.lstPatients) {
@@ -42,6 +65,7 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 				}
 			}
 		}
+
 	}
 
     @Override
@@ -49,6 +73,15 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 		// TODO Auto-generated method stub
 		this.loggedClinician = null;
 		unexportObject(this, true);
+		try {
+			this.fw = new FileWriter(logFileName, true);
+			Date date = new Date();
+			this.fw.write(date.toString() + ": Logged Out\n");
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
     @Override
@@ -57,6 +90,17 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
         for(Patient pt : this.lstPatients) {
 			result.put(pt.getId(),pt.getName());
 		}
+
+		try {
+			this.fw = new FileWriter(logFileName, true);
+			Date date = new Date();
+			this.fw.write(date.toString() + ": Listed Patients\n");
+
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
         return result;
     }
 
@@ -68,10 +112,21 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 			{
 				if(mr.getId() == record_id)
 				{
+					try {
+						this.fw = new FileWriter(logFileName, true);
+						Date date = new Date();
+						this.fw.write(date.toString() + ": Viewed Medical Record " + record_id +  "\n");
+						fw.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+
 					return mr.getInfo();
 				}
 			}
 		}
+
+
         return null;
     }
 
@@ -88,6 +143,16 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 				}
 			}
 		}
+
+		try {
+			this.fw = new FileWriter(logFileName, true);
+			Date date = new Date();
+			this.fw.write(date.toString() + ": View Patient Medical Records of " + patient_id + "\n");
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
         return table;
     }
 

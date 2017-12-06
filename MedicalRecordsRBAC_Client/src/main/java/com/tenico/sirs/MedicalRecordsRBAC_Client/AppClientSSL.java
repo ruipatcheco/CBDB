@@ -153,6 +153,8 @@ public class AppClientSSL {
 	}
 
 	private static App loginManager(FrontEnd l, Scanner inputScanner) {
+
+    	int counter = 0;
     	
     	while(true) {
 	        System.out.print("Enter your username: ");
@@ -175,14 +177,29 @@ public class AppClientSSL {
 
 			String passwordHash = tohex(passwordHashBytes);
 
-	        try {
-	            App s = l.login(username, passwordHash);
-	            return s;
-	        }
-	        catch(LoginException|RemoteException e){
-	            System.out.println("FrontEnd failed, try again");
-	            e.printStackTrace();
-	        }
+
+			if(counter < 2) {
+				try {
+					App s = l.login(username, passwordHash);
+					return s;
+				} catch (LoginException | RemoteException e) {
+					counter++;
+					System.out.println("Wrong Credentials");
+					System.out.println(3 - counter + " tentatives remaining");
+				}
+			}
+			else
+			{
+				try {
+					System.out.println("Failed to authenticate 3 times, waiting 60 seconds before you" +
+							" can try again");
+					Thread.sleep(60000);
+					counter = 0;
+				}
+				catch(InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
     	}
 
     }

@@ -52,7 +52,7 @@ public class Medical_Record {
 		this.hash = hash;
 	}
 
-    public Object getInfo() {
+    public String getInfo() {
         return this.info;
     }
 }

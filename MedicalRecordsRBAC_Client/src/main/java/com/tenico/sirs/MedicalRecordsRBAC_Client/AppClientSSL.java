@@ -96,27 +96,32 @@ public class AppClientSSL {
 					break;
 
 				case vpr:
-					int patient_id = Integer.parseInt(splitStr[1]);
-					JTable tabl = s.viewPatientRecords(patient_id);
-					int i = 0;
-					while(i < tabl.getRowCount())
-					{
-						System.out.println("ID: " + tabl.getModel().getValueAt(i,0) + " CLINICIAN: " +
-						tabl.getModel().getValueAt(i,1) + " INFO: " + tabl. getModel().getValueAt(i, 2));
-						i++;
+					if(splitStr.length == 2) {
+						int patient_id = Integer.parseInt(splitStr[1]);
+						JTable tabl = s.viewPatientRecords(patient_id);
+						int i = 0;
+						while (i < tabl.getRowCount()) {
+							System.out.println("Medical Record ID: " + tabl.getModel().getValueAt(i, 0) + '\n'
+									+ '\t' + " Clinician Name: " +
+									tabl.getModel().getValueAt(i, 1));
+							i++;
+						}
 					}
 					break;
 
 				case vmr:
-					int record_id = Integer.parseInt(splitStr[1]);
-					System.out.println(s.viewMedicalRecord(record_id));
+					if(splitStr.length == 2) {
+						int record_id = Integer.parseInt(splitStr[1]);
+						System.out.println(s.viewMedicalRecord(record_id));
+					}
 					break;
 
 				case lp:
 					Map<Integer,String> result = s.listPatients();
 					for (Map.Entry<Integer, String> entry : result.entrySet())
 					{
-						System.out.println("ID: " + entry.getKey() + " PATIENT: " + entry.getValue());
+						System.out.println("Patient ID: " + entry.getKey() + '\n' + '\t'
+								+ "Patient Name: " + entry.getValue());
 					}
 					break;
 

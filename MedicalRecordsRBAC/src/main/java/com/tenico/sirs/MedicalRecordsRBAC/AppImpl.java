@@ -61,21 +61,31 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
     }
 
     @Override
-    public Medical_Record viewMedicalRecord(int record_id) throws RemoteException {
-		Medical_Record record = this.dp.viewMedicalRecord(record_id, this.loggedClinician);
+    public String viewMedicalRecord(int record_id) throws RemoteException {
+		for(Patient pt : this.lstPatients)
+		{
+			for(Medical_Record mr : pt.getRecords())
+			{
+				if(mr.getId() == record_id)
+				{
+					return mr.getInfo();
+				}
+			}
+		}
         return null;
     }
 
     @Override
     public JTable viewPatientRecords(int patient_id) throws RemoteException {
-		JTable table = new JTable(new DefaultTableModel(new Object[]{"ID", "Clinician", "Info"}, 0));
+		JTable table = new JTable(new DefaultTableModel(new Object[]{"ID", "Clinician"}, 0));
 
 		for(Patient patient : this.lstPatients)
 		{
-			for(Medical_Record mr : patient.getRecords())
-			{
-				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				model.addRow(new Object[]{mr.getId(),this.loggedClinician.getName(),mr.getInfo()});
+			if(patient.getId() == patient_id) {
+				for (Medical_Record mr : patient.getRecords()) {
+					DefaultTableModel model = (DefaultTableModel) table.getModel();
+					model.addRow(new Object[]{mr.getId(), this.loggedClinician.getName()});
+				}
 			}
 		}
         return table;

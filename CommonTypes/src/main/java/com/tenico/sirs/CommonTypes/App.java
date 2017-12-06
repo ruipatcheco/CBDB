@@ -16,6 +16,6 @@ public interface App extends Remote
     String getLoggedClinicianName() throws RemoteException;
     void logout() throws RemoteException;
     Map<Integer, String> listPatients() throws RemoteException;
-    Medical_Record viewMedicalRecord(int record_id) throws RemoteException;
+    String viewMedicalRecord(int record_id) throws RemoteException;
     JTable viewPatientRecords(int patient_id) throws RemoteException;
 }

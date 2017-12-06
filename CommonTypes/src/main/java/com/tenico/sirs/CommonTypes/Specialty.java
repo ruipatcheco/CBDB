@@ -6,21 +6,15 @@ public class Specialty {
 	
 	public Specialty(String name, SpecialityGroup group) {
 		
-		this.setGroup(group);
-		this.setName(name);
+		this.group = group;
+		this.group = group;
 	}
 	
 	public String getName() {
 		return name;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
 	public SpecialityGroup getGroup() {
 		return group;
-	}
-	public void setGroup(SpecialityGroup group) {
-		this.group = group;
 	}
 
 }

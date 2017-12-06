@@ -72,7 +72,7 @@ public class AppClientSSL {
 	}
     
     private enum Command {
-        lp, vmr, vpr, whoami, help, exit;
+        lp, vmr, vpr, whoami, help, exit, emergency;
     }
     
     private static Boolean parseCommand(String input, App s) throws RemoteException {
@@ -85,6 +85,12 @@ public class AppClientSSL {
 			Command c = Command.valueOf(splitStr[0]);
 
 			switch(c) {
+				case emergency:
+					if(splitStr.length == 2) {
+						int patient_id = Integer.parseInt(splitStr[1]);
+						s.EmergencyButton(patient_id);
+					}
+					break;
 				case help:
 					System.out.println("Commands: lp (listPatients), vmr (viewMedicalRecord), vpr (viewPatientRecords), whoami, help, exit");
 					break;
@@ -107,13 +113,21 @@ public class AppClientSSL {
 							i++;
 						}
 					}
+					else
+						System.out.println("Write help for help");
 					break;
 
 				case vmr:
 					if(splitStr.length == 2) {
 						int record_id = Integer.parseInt(splitStr[1]);
-						System.out.println(s.viewMedicalRecord(record_id));
+						String mr = s.viewMedicalRecord(record_id);
+						if(mr == null)
+							System.out.println("You don't have access to this record");
+						else
+							System.out.println(mr);
 					}
+					else
+						System.out.println("Write help for help");
 					break;
 
 				case lp:
@@ -142,10 +156,10 @@ public class AppClientSSL {
     	
     	while(true) {
 	        System.out.print("Enter your username: ");
-	        String username = inputScanner.next();
+	        String username = inputScanner.nextLine();
 	    	
 	        System.out.print("Enter your password: ");
-	        String password = inputScanner.next();
+	        String password = inputScanner.nextLine();
 
 			//Hash The Password
 			MessageDigest messageDigest = null;
@@ -167,7 +181,7 @@ public class AppClientSSL {
 	        }
 	        catch(LoginException|RemoteException e){
 	            System.out.println("FrontEnd failed, try again");
-	            //e.printStackTrace();
+	            e.printStackTrace();
 	        }
     	}
 

@@ -121,7 +121,7 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 						e.printStackTrace();
 					}
 
-					return mr.getInfo();
+					return "Medical Record Here";
 				}
 			}
 		}
@@ -172,9 +172,17 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 	}
 
 	@Override
-	public void EmergencyButton() throws RemoteException
+	public void EmergencyButton(int pt) throws RemoteException
 	{
-		//TODO
+		Patient patient = null;
+		for(Patient p : lstPatients)
+		{
+			if(p.getId() == pt)
+				patient = p;
+		}
+		if(patient != null)
+			this.dp.emergency(this.loggedClinician, patient);
+
 	}
 
 

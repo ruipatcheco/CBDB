@@ -9,12 +9,11 @@ import java.util.Map;
 
 public interface App extends Remote
 {
-
-    Clinician RegisterClinician(int id, String specialty, String name) throws RemoteException;
     void addMedicalRecord(Patient patient, Medical_Record mr) throws RemoteException;
-    void EmergencyButton() throws RemoteException;
-    String getLoggedClinicianName() throws RemoteException;
+    void EmergencyButton(int pt) throws RemoteException;
     void logout() throws RemoteException;
+    Clinician RegisterClinician(int id, String specialty, String name) throws RemoteException;
+    String getLoggedClinicianName() throws RemoteException;
     Map<Integer, String> listPatients() throws RemoteException;
     String viewMedicalRecord(int record_id) throws RemoteException;
     JTable viewPatientRecords(int patient_id) throws RemoteException;

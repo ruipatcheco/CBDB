@@ -13,8 +13,8 @@ public class Patient {
 	
 	public Patient(int bdid, String name, Date date_of_brith) {
 		this.id = bdid;
-		this.setName(name);
-		this.setDate_of_birth(date_of_brith);
+		this.name = name;
+		this.date_of_birth = date_of_brith;
 		this.records = new ArrayList<Medical_Record>();
 	}
 	
@@ -27,19 +27,11 @@ public class Patient {
 	public int getId() {
 		return id;
 	}
-	public void setId(int id) {
-		this.id = id;
-	}
+	public void setId(int id) { this.id = id; }
 	public String getName() {
 		return name;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
 	public Date getDate_of_birth() {
 		return date_of_birth;
-	}
-	public void setDate_of_birth(Date date_of_birth) {
-		this.date_of_birth = date_of_birth;
 	}
 }

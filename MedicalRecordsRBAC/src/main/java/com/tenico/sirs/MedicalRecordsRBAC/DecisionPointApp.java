@@ -289,4 +289,74 @@ public class DecisionPointApp extends DecisionPointBase {
 
         return result;
     }
+
+
+    public void emergency(Clinician cl, Patient pt) {
+
+        List<Integer> RIDS = new ArrayList<>();
+
+        String query = "SELECT RID FROM CBDB.MEDICAL_RECORDS WHERE PatientID LIKE ?";
+
+        try
+        {
+            java.sql.PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, pt.getId());
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("RID");
+                RIDS.add(id);
+            }
+
+            rs.close();
+            ps.close();
+
+        }
+        catch (SQLException se)
+        {
+            se.printStackTrace();
+        }
+
+        if (RIDS.size() > 0) {
+            for (int mr : RIDS) {
+
+                boolean exists = false;
+
+                for(Medical_Record mrCl : pt.getRecords())
+                {
+                    if(mrCl.getId() == mr)
+                    {
+                        exists = true;
+                    }
+                }
+
+                if(!exists)
+                {
+                    try {
+                        query = "SELECT RecordHash, RecordInfo FROM CBDB.MEDICAL_RECORDS WHERE MEDICAL_RECORDS.RID LIKE ?";
+
+                        java.sql.PreparedStatement ps = con.prepareStatement(query);
+                        ps.setInt(1, mr);
+
+                        // process the results
+                        ResultSet rs = ps.executeQuery();
+
+                        while (rs.next()) {
+                            String hash = rs.getString("RecordHash");
+                            String info = rs.getString("RecordInfo");
+                            pt.addRecord(new Medical_Record(mr, pt.getId(), cl.getID(), hash, info));
+                        }
+
+                        rs.close();
+                        ps.close();
+
+                    } catch (SQLException se) {
+                        // log exception;
+                        se.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
 }

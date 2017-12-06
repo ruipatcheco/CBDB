@@ -10,5 +10,5 @@ import javax.security.auth.login.LoginException;
 public interface FrontEnd extends Remote
 {
     App login(String username, String password /* or whatever */)
-        throws LoginException, RemoteException;
+            throws LoginException, RemoteException;
 }

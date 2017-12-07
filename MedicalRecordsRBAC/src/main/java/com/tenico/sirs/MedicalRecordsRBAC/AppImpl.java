@@ -1,10 +1,13 @@
 package com.tenico.sirs.MedicalRecordsRBAC;
 
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.server.Unreferenced;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 import com.tenico.sirs.CommonTypes.*;
@@ -14,6 +17,8 @@ import javax.swing.table.DefaultTableModel;
 
 import java.io.File;
 import java.io.FileWriter;
+
+import static com.tenico.sirs.MedicalRecordsRBAC.DecisionPointAuthenticator.tohex;
 
 public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 
@@ -78,6 +83,8 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 			Date date = new Date();
 			this.fw.write(date.toString() + ": Logged Out\n");
 			fw.close();
+
+			AntiTamperLog(logFileName);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -95,8 +102,9 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 			this.fw = new FileWriter(logFileName, true);
 			Date date = new Date();
 			this.fw.write(date.toString() + ": Listed Patients\n");
-
 			fw.close();
+
+			AntiTamperLog(logFileName);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -117,6 +125,9 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 						Date date = new Date();
 						this.fw.write(date.toString() + ": Viewed Medical Record " + record_id +  "\n");
 						fw.close();
+
+						AntiTamperLog(logFileName);
+
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -126,9 +137,84 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 			}
 		}
 
-
         return null;
     }
+
+    private void AntiTamperLog(String logFileName){
+		File log = new File(logFileName);
+		//Last 2 lines, including the last hash and the last log message
+		String last2Lines = tail(log,2);
+		try {
+			String hash = Hash(last2Lines);
+			this.fw = new FileWriter(logFileName, true);
+			this.fw.write(hash + "\n");
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private String Hash(String s){
+		MessageDigest messageDigest = null;
+
+		try {
+			messageDigest = MessageDigest.getInstance("SHA-512");
+		} catch (NoSuchAlgorithmException e) {
+			System.out.println("SHA-512 not found");
+			e.printStackTrace();
+		}
+
+		byte[] result = messageDigest.digest(s.getBytes());
+
+		return tohex(result);
+	}
+
+
+	private String tail( File file, int lines) {
+		java.io.RandomAccessFile fileHandler = null;
+		try {
+			fileHandler =
+					new java.io.RandomAccessFile( file, "r" );
+			long fileLength = fileHandler.length() - 1;
+			StringBuilder sb = new StringBuilder();
+			int line = 0;
+
+			for(long filePointer = fileLength; filePointer != -1; filePointer--){
+				fileHandler.seek( filePointer );
+				int readByte = fileHandler.readByte();
+
+				if( readByte == 0xA ) {
+					if (filePointer < fileLength) {
+						line = line + 1;
+					}
+				} else if( readByte == 0xD ) {
+					if (filePointer < fileLength-1) {
+						line = line + 1;
+					}
+				}
+				if (line >= lines) {
+					break;
+				}
+				sb.append( ( char ) readByte );
+			}
+
+			String lastLine = sb.reverse().toString();
+			return lastLine;
+		} catch( java.io.FileNotFoundException e ) {
+			e.printStackTrace();
+			return null;
+		} catch( java.io.IOException e ) {
+			e.printStackTrace();
+			return null;
+		}
+		finally {
+			if (fileHandler != null )
+				try {
+					fileHandler.close();
+				} catch (IOException e) {
+				}
+		}
+	}
 
     @Override
     public JTable viewPatientRecords(int patient_id) throws RemoteException {
@@ -149,6 +235,8 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 			Date date = new Date();
 			this.fw.write(date.toString() + ": View Patient Medical Records of " + patient_id + "\n");
 			fw.close();
+
+			AntiTamperLog(logFileName);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

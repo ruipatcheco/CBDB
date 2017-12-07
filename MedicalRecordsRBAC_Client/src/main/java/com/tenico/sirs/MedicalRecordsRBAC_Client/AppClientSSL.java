@@ -120,11 +120,39 @@ public class AppClientSSL {
 				case vmr:
 					if(splitStr.length == 2) {
 						int record_id = Integer.parseInt(splitStr[1]);
-						String mr = s.viewMedicalRecord(record_id);
+						Map<String, String> mr= s.viewMedicalRecord(record_id);
 						if(mr == null)
 							System.out.println("You don't have access to this record");
-						else
-							System.out.println(mr);
+						else {
+							String RecordHashInServer = null;
+							String RecordInfo = null;
+
+							for (Map.Entry<String, String> entry : mr.entrySet())
+							{
+								RecordHashInServer = entry.getKey();
+								RecordInfo = entry.getValue();
+							}
+
+							MessageDigest messageDigest = null;
+
+							try {
+								messageDigest = MessageDigest.getInstance("SHA-512");
+							} catch (NoSuchAlgorithmException e) {
+								System.out.println("SHA-512 not found");
+								e.printStackTrace();
+							}
+
+							byte[] RecordHashInClientBytes = messageDigest.digest(RecordInfo.getBytes());
+
+							String RecordHashInClient = tohex(RecordHashInClientBytes);
+							
+							if(RecordHashInClient.equals(RecordHashInServer)){
+								System.out.println(mr.get(RecordHashInServer));
+							}
+							else {
+								System.out.println("Information not Trustworthy. Please Try Again.");
+							}
+						}
 					}
 					else
 						System.out.println("Write help for help");

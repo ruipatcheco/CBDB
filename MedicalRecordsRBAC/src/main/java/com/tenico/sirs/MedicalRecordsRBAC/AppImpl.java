@@ -114,8 +114,9 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
         return result;
     }
 
-    @Override
-    public String viewMedicalRecord(int record_id) throws RemoteException {
+	@Override
+	public Map<String, String> viewMedicalRecord(int record_id) throws RemoteException {
+		Map<String, String> result = new HashMap<>();
 		for(Patient pt : this.lstPatients)
 		{
 			for(Medical_Record mr : pt.getRecords())
@@ -127,14 +128,12 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 						Date date = new Date();
 						this.fw.write(date.toString() + ": Viewed Medical Record " + record_id +  "\n");
 						fw.close();
-
-						AntiTamperLog(logFileName);
-
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 
-					return "Medical Record Here";
+					result.put(mr.getHash(), mr.getInfo());
+					return result;
 				}
 			}
 		}

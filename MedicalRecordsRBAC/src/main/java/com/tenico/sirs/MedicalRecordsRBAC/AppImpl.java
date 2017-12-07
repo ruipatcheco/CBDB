@@ -54,6 +54,8 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 			Date date = new Date();
 			this.fw.append( date.toString() + ": Logged In\n" );
 			fw.flush();
+
+			AntiTamperLog(logFileName);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -268,6 +270,8 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 				Date date = new Date();
 				this.fw.write(date.toString() + ": Emergency button used on " + pt + "\n");
 				fw.close();
+
+				AntiTamperLog(logFileName);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

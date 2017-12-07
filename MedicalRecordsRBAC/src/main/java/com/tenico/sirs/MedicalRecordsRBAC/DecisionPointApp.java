@@ -359,4 +359,114 @@ public class DecisionPointApp extends DecisionPointBase {
             }
         }
     }
+
+    public int getLastRID() {
+
+        String query = "SELECT MAX(RID) FROM MEDICAL_RECORDS";
+        int rid = 0;
+        try
+        {
+            // create the prepared statement and add the criteria
+            java.sql.PreparedStatement ps = con.prepareStatement(query);
+
+            // process the results
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                rid = rs.getInt("MAX(RID)");
+            }
+
+            rs.close();
+            ps.close();
+        }
+        catch (SQLException se)
+        {
+            // log exception;
+            se.printStackTrace();
+        }
+
+        return rid+1;
+
+    }
+
+    public int getLastRSID() {
+
+        String query = "SELECT MAX(RSID) FROM RECORD_SPECIALTIES";
+        int rid = 0;
+        try
+        {
+            // create the prepared statement and add the criteria
+            java.sql.PreparedStatement ps = con.prepareStatement(query);
+
+            // process the results
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                rid = rs.getInt("MAX(RSID)");
+            }
+
+            rs.close();
+            ps.close();
+        }
+        catch (SQLException se)
+        {
+            // log exception;
+            se.printStackTrace();
+        }
+
+        return rid+1;
+
+    }
+
+    public void addMedicalRecord(int id, int patient_id, int clinician_id, String hash, String info, String name) {
+        String query = "INSERT INTO MEDICAL_RECORDS (RID, PatientID, ClinicianID, RecordHash, RecordInfo) VALUES " +
+                "(?, ?, ?, ?, ?);";
+
+        try
+        {
+            // create the prepared statement and add the criteria
+            java.sql.PreparedStatement ps = con.prepareStatement(query);
+
+            ps.setInt(1, id);
+            ps.setInt(2, patient_id);
+            ps.setInt(3, clinician_id);
+            ps.setString(4, hash);
+            ps.setString(5, info);
+
+            ps.execute();
+
+            ps.close();
+        }
+        catch (SQLException se)
+        {
+            // log exception;
+            se.printStackTrace();
+        }
+
+
+        query = "INSERT INTO RECORD_SPECIALTIES (RSID, RID, SpecialtyGroupID)" +
+                " VALUES (?, ?, ?);";
+
+        try
+        {
+            // create the prepared statement and add the criteria
+            java.sql.PreparedStatement ps = con.prepareStatement(query);
+
+            ps.setInt(1, getLastRSID());
+            ps.setInt(2, id);
+            ps.setString(3, name);
+
+            // process the results
+            ps.execute();
+
+            ps.close();
+        }
+        catch (SQLException se)
+        {
+            // log exception;
+            se.printStackTrace();
+        }
+    }
 }

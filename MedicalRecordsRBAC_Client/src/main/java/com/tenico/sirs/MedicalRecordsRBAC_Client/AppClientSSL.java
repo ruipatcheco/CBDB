@@ -72,7 +72,7 @@ public class AppClientSSL {
 	}
     
     private enum Command {
-        lp, vmr, vpr, whoami, help, exit, emergency;
+        lp, vmr, vpr, whoami, help, exit, emergency, amr;
     }
     
     private static Boolean parseCommand(String input, App s) throws RemoteException {
@@ -85,6 +85,32 @@ public class AppClientSSL {
 			Command c = Command.valueOf(splitStr[0]);
 
 			switch(c) {
+				case amr:
+					if(splitStr.length >= 3) {
+						MessageDigest messageDigest = null;
+
+						String mr = "";
+
+						for(int i = 2; i<splitStr.length; i++)
+						{
+							mr = mr + ' ' + splitStr[i];
+						}
+
+						try {
+							messageDigest = MessageDigest.getInstance("SHA-512");
+						} catch (NoSuchAlgorithmException e) {
+							System.out.println("SHA-512 not found");
+							e.printStackTrace();
+						}
+
+						byte[] RecordHashInClientBytes = messageDigest.digest(mr.getBytes());
+
+						String RecordHashInClient = tohex(RecordHashInClientBytes);
+
+						int patient_id = Integer.parseInt(splitStr[1]);
+						System.out.println(s.addMedicalRecord(patient_id,mr,RecordHashInClient));
+					}
+					break;
 				case emergency:
 					if(splitStr.length == 2) {
 						int patient_id = Integer.parseInt(splitStr[1]);
@@ -92,7 +118,7 @@ public class AppClientSSL {
 					}
 					break;
 				case help:
-					System.out.println("Commands: lp (listPatients), vmr (viewMedicalRecord), vpr (viewPatientRecords), whoami, help, exit");
+					System.out.println("Commands: lp (listPatients), la (listAppointments), vmr (viewMedicalRecord), vpr (viewPatientRecords), amr (addMedicalRecord), whoami, help, exit");
 					break;
 				case exit:
 					s.logout();
@@ -168,13 +194,13 @@ public class AppClientSSL {
 					break;
 
 				default:
-					System.out.println("Commands: lp (listPatients), la (listAppointments), vmr (viewMedicalRecord), vpr (viewPatientRecords), whoami, help, exit");
+					System.out.println("Commands: lp (listPatients), la (listAppointments), vmr (viewMedicalRecord), vpr (viewPatientRecords), amr (addMedicalRecord), whoami, help, exit");
 					break;
 			}
 		}
 		catch(IllegalArgumentException e)
 		{
-			System.out.println("Commands: lp (listPatients), la (listAppointments), vmr (viewMedicalRecord), vpr (viewPatientRecords), whoami, help, exit");
+			System.out.println("Commands: lp (listPatients), la (listAppointments), vmr (viewMedicalRecord), vpr (viewPatientRecords), amr (addMedicalRecord), whoami, help, exit");
 		}
 
 		return false;

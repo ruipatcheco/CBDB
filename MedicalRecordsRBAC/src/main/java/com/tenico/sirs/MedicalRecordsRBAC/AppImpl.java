@@ -247,9 +247,28 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 
 
 	@Override
-	public void addMedicalRecord(Patient patient, Medical_Record mr) throws RemoteException
+	public String addMedicalRecord(int patient, String mr, String checksum) throws RemoteException
 	{
-		//TODO Clinician this adds Medical Record mr to Patient patient
+
+		boolean exists = false;
+
+		for(Patient p : lstPatients){
+			if(p.getId() == patient)
+			{
+				exists = true;
+				Medical_Record m = new Medical_Record(this.dp.getLastRID(),patient,
+						this.loggedClinician.getID(),checksum,mr);
+				p.addRecord(m);
+				this.dp.addMedicalRecord(m.getId(),m.getPatient_id(),m.getClinician_id(),m.getHash(),
+						m.getInfo(),this.loggedClinician.getSpecialty().getGroup().getName());
+			}
+		}
+
+		if(!exists)
+			return "You do not have permission to add a Medical Record to this Pacient";
+		else
+			return "Medical Record added with success";
+
 	}
 
 	@Override

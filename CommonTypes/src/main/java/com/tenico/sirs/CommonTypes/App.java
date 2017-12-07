@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface App extends Remote
 {
-    void addMedicalRecord(Patient patient, Medical_Record mr) throws RemoteException;
+    String addMedicalRecord(int patient, String mr, String checksum) throws RemoteException;
     void EmergencyButton(int pt) throws RemoteException;
     void logout() throws RemoteException;
     String getLoggedClinicianName() throws RemoteException;

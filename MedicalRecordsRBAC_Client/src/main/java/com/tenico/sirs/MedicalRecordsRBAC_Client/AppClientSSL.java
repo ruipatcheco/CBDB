@@ -118,7 +118,7 @@ public class AppClientSSL {
 					}
 					break;
 				case help:
-					System.out.println("Commands: lp (listPatients), la (listAppointments), vmr (viewMedicalRecord), vpr (viewPatientRecords), amr (addMedicalRecord), whoami, help, exit");
+					System.out.println("Commands: lp (listPatients), vmr (viewMedicalRecord RecordId(int)), vpr (viewPatientRecords PatientId(int)), amr (addMedicalRecord PatientID(int) Content(String)), whoami, help, exit");
 					break;
 				case exit:
 					s.logout();
@@ -194,7 +194,7 @@ public class AppClientSSL {
 					break;
 
 				default:
-					System.out.println("Commands: lp (listPatients), la (listAppointments), vmr (viewMedicalRecord), vpr (viewPatientRecords), amr (addMedicalRecord), whoami, help, exit");
+					System.out.println("Commands: lp (listPatients), vmr (viewMedicalRecord RecordId(int)), vpr (viewPatientRecords PatientId(int)), amr (addMedicalRecord PatientID(int) Content(String)), whoami, help, exit");
 					break;
 			}
 		}

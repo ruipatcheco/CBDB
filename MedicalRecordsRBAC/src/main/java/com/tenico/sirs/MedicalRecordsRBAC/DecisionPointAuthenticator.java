@@ -25,7 +25,7 @@ public class DecisionPointAuthenticator extends DecisionPointBase {
         String salt = null;
         String storedHash = null;
         Statement stmt = null;
-        String query = "SELECT Salt, Hash FROM CBDB.LOGIN WHERE Username = '" + username + "'";
+        String query = "SELECT Salt, Hash FROM CBDB.LOGIN WHERE Username LIKE ?";
 
         /*
         * Should be using PreparedStatements to protect from sql injections
@@ -36,25 +36,22 @@ public class DecisionPointAuthenticator extends DecisionPointBase {
         * */
 
         try {
-            stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+            java.sql.PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, username);
+
+            ResultSet rs = ps.executeQuery();
+
             while (rs.next()) {
                 salt = rs.getString("Salt");
                 storedHash = rs.getString("Hash");
             }
-        } catch (SQLException e ) {
-            //JDBCTutorialUtilities.printSQLException(e);
-            e.printStackTrace();
-            System.out.println("Bad Login information");
-            return false;
-        } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            rs.close();
+            ps.close();
+
+        }
+        catch (SQLException se)
+        {
+            se.printStackTrace();
         }
 
         //hash(passwordhash+salt)

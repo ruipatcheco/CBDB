@@ -70,7 +70,7 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 
     @Override
 	public void logout() throws RemoteException {
-		// TODO Auto-generated method stub
+
 		this.loggedClinician = null;
 		unexportObject(this, true);
 		try {
@@ -158,14 +158,6 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 
 
 	@Override
-	public Clinician RegisterClinician(int id, String specialty, String name) throws RemoteException
-	{
-		//TODO Who can register a clinician ? Clinician is not Serializable so we must return something else
-		return null;
-	}
-
-
-	@Override
 	public void addMedicalRecord(Patient patient, Medical_Record mr) throws RemoteException
 	{
 		//TODO Clinician this adds Medical Record mr to Patient patient
@@ -180,9 +172,19 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
 			if(p.getId() == pt)
 				patient = p;
 		}
-		if(patient != null)
+		if(patient != null) {
 			this.dp.emergency(this.loggedClinician, patient);
 
+			try {
+				this.fw = new FileWriter(logFileName, true);
+				Date date = new Date();
+				this.fw.write(date.toString() + ": Emergency button used on " + pt + "\n");
+				fw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
 	}
 
 
@@ -191,7 +193,7 @@ public class AppImpl extends UnicastRemoteObject implements App, Unreferenced {
         try {
 			unexportObject(this, true);
 		} catch (NoSuchObjectException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		} // needs to be in a try/catch block of course
     }

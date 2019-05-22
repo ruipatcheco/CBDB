@@ -1,7 +1,9 @@
 # CBDB
-Cloud Based Medical Database
+Project made for the Computer Security in Networks and Systems Course
 
-To have the DATABASE
+Cloud Based Medical Database with role-based access control (RBAC)
+
+To init the DATABASE
 
 Install MySQL
 
